@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/pages/chat_list_page.dart';
@@ -19,7 +21,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with AutomaticKeepAliveClientMixin {
-  var _selectedIndex = 3;
+  var _selectedIndex = 1;
   List<MyPage> pages = [
     ServiceTypePage(),
     OrderListPage(),
@@ -76,4 +78,13 @@ class _MainPageState extends State<MainPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+            Duration(seconds: 1),
+            () => Navigator.of(context)
+                .pushNamed("/orderDetail"));
+  }
 }

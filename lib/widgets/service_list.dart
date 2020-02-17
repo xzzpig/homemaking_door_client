@@ -17,6 +17,7 @@ class ServiceList extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     serviceState.selectService(service.id);
+                    Navigator.of(context).pushNamed("/stafflist");
                   },
                   child: ListTile(
                     leading: Icon(Icons.ac_unit),

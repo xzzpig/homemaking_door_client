@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/pages/page.dart';
 import 'package:homemaking_door/providers/order_provider.dart';
+import 'package:homemaking_door/widgets/order_actions.dart';
+import 'package:homemaking_door/widgets/order_list_item.dart';
 import 'package:provider/provider.dart';
 
 class OrderListPage extends StatelessWidget with MyPage {
@@ -12,7 +14,8 @@ class OrderListPage extends StatelessWidget with MyPage {
                   controller: orderState.controller,
                   decoration: InputDecoration(
                       hintText: "搜索我的订单",
-                      hintStyle: TextStyle(color: Colors.grey[200],fontSize: 12),
+                      hintStyle:
+                          TextStyle(color: Colors.grey[200], fontSize: 12),
                       labelText: "家政上门",
                       labelStyle: TextStyle(color: Colors.white)),
                   style: TextStyle(color: Colors.white),
@@ -60,103 +63,16 @@ class OrderListPage extends StatelessWidget with MyPage {
         itemBuilder: (context, index) => Card(
           margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
           child: InkWell(
-            onTap: (){
-              print("aaa");
+            onTap: () {
+              orderState.selectOrder(0);
+              Navigator.of(context).pushNamed("/orderDetail");
             },
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      "服务名称",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                    )),
-                    Text(
-                      "订单状态",
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor, fontSize: 12),
-                    ),
-                  ]),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.ac_unit,
-                        size: 48,
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("服务人员"),
-                              Text(
-                                "服务时间",
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                              Text(
-                                "服务地点",
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          margin: EdgeInsets.all(4),
-                        ),
-                      ),
-                      Text("￥20.00", style: TextStyle(fontSize: 15)),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        child: OutlineButton(
-                          onPressed: () {},
-                          child: Text("data"),
-                          padding: EdgeInsets.all(0),
-                        ),
-                        width: 50,
-                        height: 20,
-                        padding: EdgeInsets.only(left: 4),
-                      ),
-                      Container(
-                        child: OutlineButton(
-                          onPressed: () {},
-                          child: Text("data"),
-                          padding: EdgeInsets.all(0),
-                        ),
-                        width: 50,
-                        height: 20,
-                        padding: EdgeInsets.only(left: 4),
-                      ),
-                      Container(
-                        child: OutlineButton(
-                          onPressed: () {},
-                          child: Text("data"),
-                          padding: EdgeInsets.all(0),
-                        ),
-                        width: 50,
-                        height: 20,
-                        padding: EdgeInsets.only(left: 4),
-                      ),
-                      Container(
-                        child: OutlineButton(
-                          onPressed: () {},
-                          child: Text("data"),
-                          padding: EdgeInsets.all(0),
-                        ),
-                        width: 50,
-                        height: 20,
-                        padding: EdgeInsets.only(left: 4),
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.end,
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.all(8),
+            // child: Text("data"),
+            child: OrderListItem(
+              order: orderState.getOrder(offset: index),
+              extras: [
+                OrderActions(),
+              ],
             ),
           ),
         ),

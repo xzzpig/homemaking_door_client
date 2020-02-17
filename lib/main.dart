@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:homemaking_door/pages/loading_page.dart';
 import 'package:homemaking_door/pages/login_page.dart';
 import 'package:homemaking_door/pages/main_page.dart';
+import 'package:homemaking_door/pages/order_detail_page.dart';
+import 'package:homemaking_door/pages/service_staff_detail_page.dart';
+import 'package:homemaking_door/pages/service_staff_list_page.dart';
 import 'package:homemaking_door/providers/chat_provider.dart';
 import 'package:homemaking_door/providers/order_provider.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
@@ -45,6 +48,9 @@ class MyApp extends StatelessWidget {
           "/":(context)=>LoadingPage(),
           "/main":(context)=>MainPage(),
           "/login":(context)=>LoginPage(),
+          "/stafflist":(context)=>ServiceStaffListPage(),
+          "/staffdetail":(context)=>ServiceStaffDetailPage(),
+          "/orderDetail":(context)=>OrderDetailPage(),
         },
       ),
     );
