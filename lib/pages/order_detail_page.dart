@@ -39,7 +39,7 @@ class OrderDetailPage extends StatelessWidget {
               ],
             ),
             bottomSheet: Container(
-                child: OrderActions(),
+                child: OrderActions(order),
                 padding: EdgeInsets.all(8),
                 // color: Colors.white,
                 decoration: new BoxDecoration(

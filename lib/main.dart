@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:homemaking_door/graphql.dart';
 import 'package:homemaking_door/pages/loading_page.dart';
 import 'package:homemaking_door/pages/login_page.dart';
 import 'package:homemaking_door/pages/main_page.dart';
+import 'package:homemaking_door/pages/order_create_page.dart';
 import 'package:homemaking_door/pages/order_detail_page.dart';
 import 'package:homemaking_door/pages/service_staff_detail_page.dart';
 import 'package:homemaking_door/pages/service_staff_list_page.dart';
@@ -18,15 +20,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // GraphQLApi.getPhone(
+    //         "eyJyb2xlcyI6WyJ1c2VyIl0sImFsZyI6IkhTNTEyIn0.eyJqdGkiOiIxIiwiaWF0IjoxNTgxNzY4NTc1LCJhdWQiOiJ4enpwaWcifQ.dRDAG21-fUaQ3_6J7t7sIqLGjtVtEejI9kR3pZnjxlVoga-sizW2FmJ2_EBdJ1QicsWQZux8Da4gUYDqS-w-MA")
+    //     .then(print);
+    GraphQLApi.getServiceInfo(1);
     return MultiProvider(
       providers: [
         FutureProvider<UserInfoState>(
           create: (context) async =>
               UserInfoState(sp: await SharedPreferences.getInstance()),
         ),
-        ChangeNotifierProvider<ServiceState>(create: (context) => ServiceState(),),
-        ChangeNotifierProvider<OrderState>(create: (context) => OrderState(),),
-        ChangeNotifierProvider<ChatState>(create: (context) => ChatState(),),
+        ChangeNotifierProvider<ServiceState>(
+          create: (context) => ServiceState(),
+        ),
+        ChangeNotifierProvider<OrderState>(
+          create: (context) => OrderState(),
+        ),
+        ChangeNotifierProvider<ChatState>(
+          create: (context) => ChatState(),
+        ),
       ],
       child: MaterialApp(
         title: '家政上门',
@@ -45,12 +57,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: "/",
         routes: {
-          "/":(context)=>LoadingPage(),
-          "/main":(context)=>MainPage(),
-          "/login":(context)=>LoginPage(),
-          "/stafflist":(context)=>ServiceStaffListPage(),
-          "/staffdetail":(context)=>ServiceStaffDetailPage(),
-          "/orderDetail":(context)=>OrderDetailPage(),
+          "/": (context) => LoadingPage(),
+          "/main": (context) => MainPage(),
+          "/login": (context) => LoginPage(),
+          "/stafflist": (context) => ServiceStaffListPage(),
+          "/staffdetail": (context) => ServiceStaffDetailPage(),
+          "/orderDetail": (context) => OrderDetailPage(),
+          "/createOrder": (context) => OrderCreatePage()
         },
       ),
     );

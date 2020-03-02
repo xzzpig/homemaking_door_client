@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/pages/page.dart';
 import 'package:homemaking_door/providers/order_provider.dart';
+import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:homemaking_door/widgets/order_actions.dart';
 import 'package:homemaking_door/widgets/order_list_item.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +50,6 @@ class OrderListPage extends StatelessWidget with MyPage {
             Tab(text: "待评价"),
           ],
           onTap: (index) {
-            print(index);
             Provider.of<OrderState>(context, listen: false)
                 .selectOrderState(index - 1);
           },
@@ -58,8 +59,8 @@ class OrderListPage extends StatelessWidget with MyPage {
   @override
   Widget build(BuildContext context) {
     print("build order list page");
-    return Consumer<OrderState>(
-      builder: (context, orderState, child) => ListView.builder(
+    return Consumer2<OrderState, UserInfoState>(
+      builder: (context, orderState, userInfoState, child) => ListView.builder(
         itemBuilder: (context, index) => Card(
           margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
           child: InkWell(
@@ -67,16 +68,24 @@ class OrderListPage extends StatelessWidget with MyPage {
               orderState.selectOrder(0);
               Navigator.of(context).pushNamed("/orderDetail");
             },
-            // child: Text("data"),
-            child: OrderListItem(
-              order: orderState.getOrder(offset: index),
-              extras: [
-                OrderActions(),
-              ],
-            ),
+            child: FutureBuilder<Order>(
+                future: orderState.getOrder(userInfoState.token, index),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var order = snapshot.data;
+                    return OrderListItem(
+                      order: order,
+                      extras: [
+                        OrderActions(order),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
           ),
         ),
-        itemCount: 10,
+        itemCount: orderState.getOrderCount(userInfoState.token),
       ),
     );
   }

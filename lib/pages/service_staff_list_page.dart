@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
+import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:homemaking_door/widgets/service_staff_list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -11,23 +12,30 @@ class ServiceStaffListPage extends StatelessWidget {
     //         Duration(seconds: 1),
     //         () => Navigator.of(context)
     //             .pushNamed("/staffdetail"));
-    return Consumer<ServiceState>(
-      builder: (context, serviceState, child) => Scaffold(
+    return Consumer2<ServiceState, UserInfoState>(
+      builder: (context, serviceState, userInfoState, child) => Scaffold(
         appBar: AppBar(
           title: Text("家政上门"),
         ),
         body: ListView.builder(
           itemBuilder: (context, index) {
-            var serviceInfo = serviceState.serviceInfos[index];
-            return InkWell(
-              onTap: () {
-                serviceState.selectServiceInfo(index);
-                Navigator.pushNamed(context, "/staffdetail");
-              },
-              child: ServiceStaffListItem(serviceInfo: serviceInfo),
-            );
+            return FutureBuilder<ServiceInfo>(
+                future: serviceState.getServiceInfo(userInfoState.token, index),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var serviceInfo = snapshot.data;
+                    return InkWell(
+                      onTap: () {
+                        serviceState.selectServiceInfo(serviceInfo);
+                        Navigator.pushNamed(context, "/staffdetail");
+                      },
+                      child: ServiceStaffListItem(serviceInfo: serviceInfo),
+                    );
+                  } else
+                    return Container();
+                });
           },
-          itemCount: serviceState.serviceInfos.length,
+          itemCount: serviceState.serviceInfoCount(userInfoState.token),
         ),
       ),
     );

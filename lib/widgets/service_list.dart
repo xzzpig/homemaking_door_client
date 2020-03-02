@@ -7,6 +7,7 @@ class ServiceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ServiceState>(
       builder: (context, serviceState, _) {
+        if(serviceState==null)return Container();
         var services = serviceState.services;
         return ListView.builder(
           itemBuilder: (context, index) {

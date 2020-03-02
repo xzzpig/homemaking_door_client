@@ -7,8 +7,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:homemaking_door/graphql.dart';
 
 import 'package:homemaking_door/main.dart';
+import 'package:homemaking_door/utils.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -26,5 +28,17 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+  });
+
+  test("Test MD5 Method", (){
+    "aaa".md5().println();
+  });
+
+  test("Test timestamp",(){
+    print(DateTime.now().millisecondsSinceEpoch);
+  });
+
+  test("Test login",() async {
+    print(await GraphQLApi.login("xzzpig","52xzzpig"));
   });
 }

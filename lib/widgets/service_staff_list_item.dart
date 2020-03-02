@@ -61,12 +61,12 @@ class ServiceStaffListItem extends StatelessWidget {
                                 tag,
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 10),
+                                    fontSize: 8),
                               ),
                               shape: BadgeShape.square,
                               borderRadius: 4,
                               padding: const EdgeInsets.fromLTRB(
-                                  2, 0, 2, 0),
+                                  2, 1, 2, 1),
                               badgeColor:
                                   Theme.of(context).accentColor,
                             ),

@@ -4,7 +4,8 @@ import 'package:homemaking_door/beans.dart';
 class OrderListItem extends StatelessWidget {
   final Order order;
   final Iterable<Widget> extras;
-  const OrderListItem({Key key, this.order,this.extras=const []}) : super(key: key);
+  const OrderListItem({Key key, this.order, this.extras = const []})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class OrderListItem extends StatelessWidget {
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       Text(
-                        "服务地点",
+                        "${order.address.detail}(${order.address.region.mername})",
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
@@ -48,10 +49,11 @@ class OrderListItem extends StatelessWidget {
                   margin: EdgeInsets.all(4),
                 ),
               ),
-              Text("￥${order.price.toStringAsFixed(2)}", style: TextStyle(fontSize: 15)),
+              Text("￥${order.price.toStringAsFixed(2)}",
+                  style: TextStyle(fontSize: 15)),
             ],
           ),
-         ]..addAll(extras),
+        ]..addAll(extras),
       ),
       padding: EdgeInsets.all(8),
     );

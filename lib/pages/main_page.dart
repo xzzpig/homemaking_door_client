@@ -21,7 +21,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with AutomaticKeepAliveClientMixin {
-  var _selectedIndex = 1;
+  var _selectedIndex = 0;
   List<MyPage> pages = [
     ServiceTypePage(),
     OrderListPage(),
@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage>
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items:  [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               title: Text('服务'),
@@ -60,8 +60,16 @@ class _MainPageState extends State<MainPage>
               title: Text('订单'),
             ),
             BottomNavigationBarItem(
-              icon: Badge(showBadge: Provider.of<ChatState>(context).totalMessageCount!=0,child: Icon(Icons.message),badgeContent: Text(Provider.of<ChatState>(context).totalMessageCount.toString(),style: TextStyle(color: Colors.white,fontSize: 10),),),
-              title:  Text('聊天'),
+              icon: Badge(
+                showBadge:
+                    Provider.of<ChatState>(context).totalMessageCount != 0,
+                child: Icon(Icons.message),
+                badgeContent: Text(
+                  Provider.of<ChatState>(context).totalMessageCount.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ),
+              title: Text('聊天'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
@@ -82,9 +90,7 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
-    Timer(
-            Duration(seconds: 1),
-            () => Navigator.of(context)
-                .pushNamed("/orderDetail"));
+    // Timer(Duration(seconds: 1),
+    //     () => Navigator.of(context).pushNamed("/createOrder"));
   }
 }

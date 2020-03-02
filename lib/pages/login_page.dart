@@ -57,14 +57,15 @@ class _LoginPageState extends State<LoginPage> {
               labelText: "密码",
               contentPadding: EdgeInsets.all(10.0),
               icon: InkWell(
+                canRequestFocus: false,
                 child: Icon(
                   Icons.remove_red_eye,
                   color: _pwdVisible
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).iconTheme.color,
                 ),
-                onTap: () => this
-                    .setState(() => {this._pwdVisible = !this._pwdVisible}),
+                onTap: () =>
+                    this.setState(() => {this._pwdVisible = !this._pwdVisible}),
               ),
             ),
             obscureText: !this._pwdVisible,
@@ -76,13 +77,16 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Expanded(
                   child: RaisedButton(
-                onPressed: () {
+                onPressed: () async {
                   print(_username.text);
-                  var result = userinfo.login(_username.text, _password.text);
-                  if (result==null) {
-                    Navigator.of(context).pushNamedAndRemoveUntil("/main", (_) => false);
+                  var result =
+                      await userinfo.login(_username.text, _password.text);
+                  if (result == null) {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil("/main", (_) => false);
                   } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("登录失败:$result")));
+                    Scaffold.of(context)
+                        .showSnackBar(SnackBar(content: Text("登录失败:$result")));
                   }
                 },
                 child: Text(
