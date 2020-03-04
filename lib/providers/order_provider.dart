@@ -63,24 +63,34 @@ class OrderState with ChangeNotifier {
 
   var _selectedOrderId = 0;
   int get selectedOrderId => _selectedOrderId;
-  Order get selectedOrder => Order(
-      serviceInfo: ServiceInfo(
-          service: Service(name: "服务名称"),
-          serviceStaff: ServiceStaff(
-              publicInfo: PublicUser(name: "服务人员", headImage: ""),
-              score: 3,
-              tags: ['aa', 'bb'],
-              orderCount: 10),
-          price: 10),
-      state: 0,
-      staff: ServiceStaff(publicInfo: PublicUser(name: "服务人员")),
-      time: DateTime.now(),
-      address: Address(detail: "服务地点"),
-      userConfirm: false,
-      price: 20,
-      staffConfirm: false);
+  Future<Order> getSelectedOrder(String token) async {
+    return GraphQLApi.getOrder(token, _selectedOrderId);
+  }
+
   void selectOrder(int id) {
     _selectedOrderId = id;
+    notifyListeners();
+  }
+
+  Future<void> confirmOrder(String token, int order) async {
+    await GraphQLApi.confirmOrder(token, order);
+    _cacheOrderMap.clear();
+    _orderCount.clear();
+    notifyListeners();
+  }
+
+  Future<void> confirmDoor(String token, int order) async {
+    await GraphQLApi.confirmDoor(token, order);
+    _cacheOrderMap.clear();
+    _orderCount.clear();
+    notifyListeners();
+  }
+
+  Future<void> assessOrder(
+      String token, int order, int score, String detail) async {
+    await GraphQLApi.assessOrder(token, order, score, detail);
+    _cacheOrderMap.clear();
+    _orderCount.clear();
     notifyListeners();
   }
 }

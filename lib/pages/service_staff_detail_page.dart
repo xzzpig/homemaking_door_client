@@ -1,12 +1,15 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
+import 'package:homemaking_door/pages/order_create_page.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ServiceStaffDetailPage extends StatelessWidget {
+  static String routeName = "/staffDetail";
+
   @override
   Widget build(BuildContext context) {
     print("buld ServiceStaffDetailPage");
@@ -216,7 +219,8 @@ class ServiceStaffDetailPage extends StatelessWidget {
                   ),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/createOrder");
+                      Navigator.of(context)
+                          .pushNamed(OrderCreatePage.routeName);
                     },
                     child: Icon(Icons.add_shopping_cart),
                     tooltip: "下单",

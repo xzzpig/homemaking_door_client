@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/graphql.dart';
+import 'package:homemaking_door/pages/main_page.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:homemaking_door/utils.dart';
 import 'package:provider/provider.dart';
 
 class OrderCreatePage extends StatefulWidget {
+  static String routeName = "/createOrder";
+
   @override
   _OrderCreatePageState createState() => _OrderCreatePageState();
 }
@@ -108,8 +111,8 @@ class _OrderCreatePageState extends State<OrderCreatePage> {
                                       SnackBar(content: "创建订单成功".toText()))
                                   .closed
                                   .then((value) {
-                                Navigator.of(context).popUntil(
-                                    (route) => route.settings.name == "/main");
+                                Navigator.of(context).popUntil((route) =>
+                                    route.settings.name == MainPage.routeName);
                               });
                             }).catchError(print);
                           }

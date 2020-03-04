@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/graphql.dart';
+import 'package:homemaking_door/pages/address_edit_page.dart';
+import 'package:homemaking_door/pages/address_list_page.dart';
 import 'package:homemaking_door/pages/loading_page.dart';
 import 'package:homemaking_door/pages/login_page.dart';
 import 'package:homemaking_door/pages/main_page.dart';
+import 'package:homemaking_door/pages/me_info_page.dart';
+import 'package:homemaking_door/pages/order_assess_page.dart';
 import 'package:homemaking_door/pages/order_create_page.dart';
 import 'package:homemaking_door/pages/order_detail_page.dart';
+import 'package:homemaking_door/pages/region_select_page.dart';
 import 'package:homemaking_door/pages/service_staff_detail_page.dart';
 import 'package:homemaking_door/pages/service_staff_list_page.dart';
+import 'package:homemaking_door/pages/service_staff_star_list_page.dart';
 import 'package:homemaking_door/providers/chat_provider.dart';
 import 'package:homemaking_door/providers/order_provider.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
@@ -55,15 +61,23 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: "/",
+        initialRoute: LoadingPage.routeName,
         routes: {
-          "/": (context) => LoadingPage(),
-          "/main": (context) => MainPage(),
-          "/login": (context) => LoginPage(),
-          "/stafflist": (context) => ServiceStaffListPage(),
-          "/staffdetail": (context) => ServiceStaffDetailPage(),
-          "/orderDetail": (context) => OrderDetailPage(),
-          "/createOrder": (context) => OrderCreatePage()
+          LoadingPage.routeName: (context) => LoadingPage(),
+          MainPage.routeName: (context) => MainPage(),
+          LoginPage.routeName: (context) => LoginPage(),
+          ServiceStaffListPage.routeName: (context) => ServiceStaffListPage(),
+          ServiceStaffDetailPage.routeName: (context) =>
+              ServiceStaffDetailPage(),
+          OrderDetailPage.routeName: (context) => OrderDetailPage(),
+          OrderCreatePage.routeName: (context) => OrderCreatePage(),
+          OrderAssessPage.routeName: (context) => OrderAssessPage(),
+          ServiceStaffStarListPage.routeName: (context) =>
+              ServiceStaffStarListPage(),
+          MeInfoPage.routeName: (context) => MeInfoPage(),
+          RegionSelectPage.routeName: (context) => RegionSelectPage(),
+          AddressListPage.routeName: (context) => AddressListPage(),
+          AddressEditPage.routeName: (context) => AddressEditPage(),
         },
       ),
     );

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/pages/page.dart';
+import 'package:homemaking_door/pages/service_staff_star_list_page.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'me_info_page.dart';
 
 class MePage extends StatelessWidget with MyPage {
   @override
@@ -26,7 +29,9 @@ class MePage extends StatelessWidget with MyPage {
                       title: Text(info.nickName),
                       subtitle: Text(info.describe),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(MeInfoPage.routeName);
+                    },
                   ),
                   InkWell(
                     child: ListTile(
@@ -36,7 +41,10 @@ class MePage extends StatelessWidget with MyPage {
                         size: 16,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(ServiceStaffStarListPage.routeName);
+                    },
                   ),
                   InkWell(
                     child: ListTile(

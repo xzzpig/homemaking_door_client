@@ -281,6 +281,8 @@ mutation($token:String!,$staffId:Int!,$star:Boolean){
                   }
                   price
                   actions
+                  userConfirm
+                  staffConfirm
                 }
               }
             }
@@ -364,13 +366,14 @@ mutation($token:String!,$staffId:Int!,$star:Boolean){
           auth(token: $token) {
             UserQuery {
               info {
-                addresses{
+                addresses {
                   id
-                  region{
+                  region {
                     id
                     mername
                   }
                   detail
+                  isDefault
                 }
               }
             }
@@ -466,6 +469,227 @@ mutation($token:String!,$staffId:Int!,$star:Boolean){
         "time": time.millisecondsSinceEpoch,
         "address": address
       }
+    });
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<Order> getOrder(String token, int orderId) async {
+    var options = QueryOptions(document: r"""
+      query ($token: String!, $orderId: Int!) {
+        UserQuery {
+          auth(token: $token) {
+            UserQuery {
+              info {
+                order(id: $orderId) {
+                  id
+                  serviceInfo {
+                    id
+                    service {
+                      id
+                      name
+                    }
+                    serviceStaff {
+                      publicInfo {
+                        name
+                      }
+                      score
+                      orderCount
+                      tags
+                    }
+                    price
+                  }
+                  state
+                  staff {
+                    id
+                    publicInfo {
+                      id
+                      name
+                    }
+                  }
+                  time
+                  address {
+                    id
+                    detail
+                    region {
+                      id
+                      mername
+                    }
+                  }
+                  price
+                  actions
+                }
+              }
+            }
+          }
+        }
+      }
+    """, variables: {"token": token, "orderId": orderId});
+    var result = await client.query(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    var res = Order.fromDynamic(
+        result.data["UserQuery"]["auth"]["UserQuery"]["info"]["order"]);
+    return res;
+  }
+
+  static Future<void> confirmOrder(String token, int order) async {
+    var options = MutationOptions(document: r"""
+      mutation ($token: String!, $orderId: Int!) {
+        confirmOrder(token:$token,order:$orderId)
+      }
+    """, variables: {"token": token, "orderId": order});
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<void> confirmDoor(String token, int order) async {
+    var options = MutationOptions(document: r"""
+      mutation ($token: String!, $orderId: Int!) {
+        confirmDoor(token: $token, order: $orderId)
+      }
+    """, variables: {"token": token, "orderId": order});
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<void> assessOrder(
+      String token, int order, int score, String detail) async {
+    var options = MutationOptions(document: r"""
+      mutation ($token: String!, $orderId: Int!, $score: Int!, $detail: String) {
+        assessOrder(token: $token, order: $orderId, score: $score, detail: $detail)
+      }
+    """, variables: {
+      "token": token,
+      "orderId": order,
+      "score": score,
+      "detail": detail
+    });
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<List<ServiceStaff>> getStarStaffs(String token) async {
+    var options = QueryOptions(document: r"""
+query ($token: String!) {
+  UserQuery {
+    auth(token: $token) {
+      UserQuery {
+        info{
+          stars{
+            id
+            publicInfo{
+              id
+              name
+            }
+            score
+            orderCount
+            tags
+          }
+        }
+      }
+    }
+  }
+}
+    """, variables: {"token": token});
+    var result = await client.query(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    var res = (result.data["UserQuery"]["auth"]["UserQuery"]["info"]["stars"]
+            as List<dynamic>)
+        .map((e) => ServiceStaff.fromDynamic(e))
+        .toList();
+    return res;
+  }
+
+  static Future<List<Region>> getSubRegions({int regionId = 100000}) async {
+    var options = QueryOptions(document: r"""
+      query($id:Int!) {
+        RegionQuery{
+          subRegions(id:$id){
+            id
+            name
+          }
+        }
+      }
+    """, variables: {"id": regionId});
+    var result = await client.query(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    var res = (result.data["RegionQuery"]["subRegions"] as List<dynamic>)
+        .map((e) => Region.fromDynamic(e))
+        .toList();
+    return res;
+  }
+
+  static Future<Region> getRegion(int regionId) async {
+    var options = QueryOptions(document: r"""
+      query ($id: Int!) {
+        RegionQuery {
+          region(id: $id) {
+            id
+            name
+            mername
+            parent {
+              id
+              name
+              parent {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    """, variables: {"id": regionId});
+    var result = await client.query(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    var res = Region.fromDynamic(result.data["RegionQuery"]["region"]);
+    return res;
+  }
+
+  static Future<void> changeRegion(String token, int regionId) async {
+    var options = MutationOptions(document: r"""
+      mutation($token:String!,$regionId:Int!){
+        changeRegion(token:$token,regionId:$regionId)
+      }
+    """, variables: {"token": token, "regionId": regionId});
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<void> editAddress(String token, int addressId, int region,
+      String detail, bool isDefault) async {
+    var options = MutationOptions(document: r"""
+      mutation ($token: String!, $id: Int, $region: Int!, $detail: String!,$isDefault:Boolean!) {
+        editAddress(token:$token,id:$id,region:$region,detail:$detail,isDefault:$isDefault)
+      }
+    """, variables: {
+      "token": token,
+      "id": addressId,
+      "region": region,
+      "detail": detail,
+      "isDefault": isDefault
     });
     var result = await client.mutate(options);
     if (result.hasErrors) {

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
+import 'package:homemaking_door/graphql.dart';
+import 'package:homemaking_door/pages/order_detail_page.dart';
 import 'package:homemaking_door/pages/page.dart';
 import 'package:homemaking_door/providers/order_provider.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
+import 'package:homemaking_door/utils.dart';
+import 'package:homemaking_door/widgets/loading_widget.dart';
 import 'package:homemaking_door/widgets/order_actions.dart';
 import 'package:homemaking_door/widgets/order_list_item.dart';
 import 'package:provider/provider.dart';
@@ -63,27 +67,36 @@ class OrderListPage extends StatelessWidget with MyPage {
       builder: (context, orderState, userInfoState, child) => ListView.builder(
         itemBuilder: (context, index) => Card(
           margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
-          child: InkWell(
-            onTap: () {
-              orderState.selectOrder(0);
-              Navigator.of(context).pushNamed("/orderDetail");
-            },
-            child: FutureBuilder<Order>(
-                future: orderState.getOrder(userInfoState.token, index),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var order = snapshot.data;
-                    return OrderListItem(
+          child: FutureBuilder<Order>(
+              future: orderState.getOrder(userInfoState.token, index),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var order = snapshot.data;
+                  return InkWell(
+                    onTap: () {
+                      orderState.selectOrder(order.id);
+                      Navigator.of(context)
+                          .pushNamed(OrderDetailPage.routeName);
+                    },
+                    child: OrderListItem(
                       order: order,
                       extras: [
                         OrderActions(order),
                       ],
-                    );
-                  } else {
-                    return Container();
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  if (snapshot.error.runtimeType == GraphQLException) {
+                    return (snapshot.error as GraphQLException)
+                        .message
+                        .toErrorText();
                   }
-                }),
-          ),
+                  print(snapshot.error);
+                  return snapshot.error.toString().toErrorText();
+                } else {
+                  return Loading();
+                }
+              }),
         ),
         itemCount: orderState.getOrderCount(userInfoState.token),
       ),

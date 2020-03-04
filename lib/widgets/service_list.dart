@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homemaking_door/pages/service_staff_list_page.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +8,7 @@ class ServiceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ServiceState>(
       builder: (context, serviceState, _) {
-        if(serviceState==null)return Container();
+        if (serviceState == null) return Container();
         var services = serviceState.services;
         return ListView.builder(
           itemBuilder: (context, index) {
@@ -18,7 +19,8 @@ class ServiceList extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     serviceState.selectService(service.id);
-                    Navigator.of(context).pushNamed("/stafflist");
+                    Navigator.of(context)
+                        .pushNamed(ServiceStaffListPage.routeName);
                   },
                   child: ListTile(
                     leading: Icon(Icons.ac_unit),

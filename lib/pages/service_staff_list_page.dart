@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
+import 'package:homemaking_door/pages/service_staff_detail_page.dart';
 import 'package:homemaking_door/providers/service_provider.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:homemaking_door/widgets/service_staff_list_item.dart';
 import 'package:provider/provider.dart';
 
 class ServiceStaffListPage extends StatelessWidget {
+  static String routeName = "/stafflist";
+
   @override
   Widget build(BuildContext context) {
     //  Timer(
@@ -27,7 +30,8 @@ class ServiceStaffListPage extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         serviceState.selectServiceInfo(serviceInfo);
-                        Navigator.pushNamed(context, "/staffdetail");
+                        Navigator.pushNamed(
+                            context, ServiceStaffDetailPage.routeName);
                       },
                       child: ServiceStaffListItem(serviceInfo: serviceInfo),
                     );

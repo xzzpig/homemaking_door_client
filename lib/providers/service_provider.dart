@@ -94,7 +94,7 @@ class ServiceState with ChangeNotifier {
   var _selectedServiceStaffId = 0;
   int get selectedServiceStaffId => _selectedServiceStaffId;
   void selectServiceStaff(int id) {
-    _selectedServiceId = id;
+    _selectedServiceStaffId = id;
     notifyListeners();
   }
 

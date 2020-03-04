@@ -17,7 +17,7 @@ class OrderActions extends StatelessWidget {
         return Container(
           child: OutlineButton(
             onPressed: () {
-              actionObj.action(context);
+              actionObj.action(context, order);
             },
             child: Text(
               actionObj.displayName,

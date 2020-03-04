@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:homemaking_door/pages/order_assess_page.dart';
 import 'package:time_ago_provider/time_ago_provider.dart';
 import 'package:homemaking_door/utils.dart';
 
@@ -67,13 +69,16 @@ class Address {
   Region region;
   String detail;
   PublicUser user;
-  Address({this.id, this.region, this.detail, this.user});
+  bool isDefault;
+
+  Address({this.id, this.region, this.detail, this.user, this.isDefault});
   Address.fromDynamic(dynamic data) {
     if (data == null) return;
     this.id = data["id"];
     this.region = Region.fromDynamic(data["region"]);
     this.detail = data["detail"];
     this.user = PublicUser.fromDynamic(data["user"]);
+    this.isDefault = data["isDefault"];
   }
 }
 
@@ -264,21 +269,38 @@ class OrderAction {
   static String ORDER_CANCEL = "ORDER_CANCEL";
   static String ORDER_MODIFY = "ORDER_MODIFY";
   static String ORDER_CONFIRM = "ORDER_CONFIRM";
+  static String DOOR_CONFIRM = "DOOR_CONFIRM";
+  static String ORDER_ASSESS = "ORDER_ASSESS";
   static Map<String, OrderAction> actions = {
-    ORDER_CANCEL: OrderAction(ORDER_CONFIRM, "取消订单", (context) {
+    ORDER_CANCEL: OrderAction(ORDER_CONFIRM, "取消订单", (context, order) {
       print("a");
     }),
-    ORDER_MODIFY: OrderAction(ORDER_CONFIRM, "修改订单", (context) {
+    ORDER_MODIFY: OrderAction(ORDER_CONFIRM, "修改订单", (context, order) {
       print("b");
     }),
-    ORDER_CONFIRM: OrderAction(ORDER_CONFIRM, "确认订单", (context) {
-      print("c");
-    })
+    ORDER_CONFIRM: OrderAction(ORDER_CONFIRM, "确认订单", (context, order) {
+      var userInfoState = context.userInfoState;
+      var orderState = context.orderState;
+      orderState.confirmOrder(userInfoState.token, order.id).then((value) {
+        Scaffold.of(context).showSnackBar(SnackBar(content: "订单确认成功".toText()));
+      }).catchError(print);
+    }),
+    DOOR_CONFIRM: OrderAction(DOOR_CONFIRM, "确认上门", (context, order) {
+      var userInfoState = context.userInfoState;
+      var orderState = context.orderState;
+      orderState.confirmDoor(userInfoState.token, order.id).then((value) {
+        Scaffold.of(context).showSnackBar(SnackBar(content: "上门确认成功".toText()));
+      }).catchError(print);
+    }),
+    ORDER_ASSESS: OrderAction(ORDER_ASSESS, "评价", (context, order) {
+      Navigator.of(context).pushNamed(OrderAssessPage.routeName,
+          arguments: OrderAssessPageRouteArguments(order.id));
+    }),
   };
 
   String name;
   String displayName;
-  void Function(BuildContext) action;
+  void Function(BuildContext, Order) action;
   OrderAction(this.name, this.displayName, this.action);
 }
 
@@ -316,7 +338,9 @@ class Order {
     this.state = data["state"];
     this.serviceInfo = ServiceInfo.fromDynamic(data["serviceInfo"]);
     this.price = data["price"];
-    this.time = DateTime.fromMillisecondsSinceEpoch(data["time"]);
+    this.time = data["time"] != null
+        ? DateTime.fromMillisecondsSinceEpoch(data["time"])
+        : null;
     this.address = Address.fromDynamic(data["address"]);
     this.form = (data["form"] as String)?.decode();
     this.userConfirm = data["userConfirm"];
@@ -324,7 +348,10 @@ class Order {
     this.actions =
         (data["actions"] as List<dynamic>)?.map((e) => e.toString())?.toList();
   }
-  String get humanState => const ["待确认", "待上门", "待评价", "已完成"][state];
+  String get humanState =>
+      (state == 0 && userConfirm == true && staffConfirm == false)
+          ? "待对方确认"
+          : const ["待确认", "待上门", "待评价", "已完成"][state];
   String get humanTime => time.humanDateTime();
 }
 
