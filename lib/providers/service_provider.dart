@@ -80,7 +80,7 @@ class ServiceState with ChangeNotifier {
     return _cacheServiceInfos[offset];
   }
 
-  int _selectedServiceInfoId = null;
+  int _selectedServiceInfoId;
   int get selectedServiceInfoId => _selectedServiceInfoId;
   void selectServiceInfo(ServiceInfo serviceInfo) {
     _selectedServiceInfoId = serviceInfo.id;

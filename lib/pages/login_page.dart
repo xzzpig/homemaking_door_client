@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/pages/main_page.dart';
+import 'package:homemaking_door/pages/register_page.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
-  static String routeName="/login";
+  static String routeName = "/login";
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -85,8 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                   var result =
                       await userinfo.login(_username.text, _password.text);
                   if (result == null) {
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(MainPage.routeName, (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        MainPage.routeName, (_) => false);
                   } else {
                     Scaffold.of(context)
                         .showSnackBar(SnackBar(content: Text("登录失败:$result")));
@@ -107,7 +108,11 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Text("忘记密码"),
               Spacer(),
-              Text("注册"),
+              InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RegisterPage.routeName);
+                  },
+                  child: Text("注册")),
             ],
           )
         ],

@@ -274,9 +274,11 @@ class OrderAction {
   static Map<String, OrderAction> actions = {
     ORDER_CANCEL: OrderAction(ORDER_CONFIRM, "取消订单", (context, order) {
       print("a");
+      //TODO
     }),
     ORDER_MODIFY: OrderAction(ORDER_CONFIRM, "修改订单", (context, order) {
       print("b");
+      //TODO
     }),
     ORDER_CONFIRM: OrderAction(ORDER_CONFIRM, "确认订单", (context, order) {
       var userInfoState = context.userInfoState;

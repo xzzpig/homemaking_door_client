@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homemaking_door/beans.dart';
 
 class Loading extends StatelessWidget {
   const Loading({

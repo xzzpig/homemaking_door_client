@@ -87,6 +87,7 @@ class GraphQLApi {
   }
 
   static Future<AuthUser> getAuthUser(String token) async {
+    print(token);
     var options = QueryOptions(document: r"""
       query($token:String!){
         UserQuery{
@@ -117,8 +118,9 @@ class GraphQLApi {
     if (result.hasErrors) {
       throw GraphQLException(result.errors[0]);
     }
-    return AuthUser.fromDynamic(
+    var res = AuthUser.fromDynamic(
         result.data["UserQuery"]["auth"]["UserQuery"]["info"]);
+    return res;
   }
 
   static Future<List<ServiceInfo>> getServiceInfos(
@@ -690,6 +692,64 @@ query ($token: String!) {
       "region": region,
       "detail": detail,
       "isDefault": isDefault
+    });
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<void> editInfo(String token, String nickName, String name,
+      bool sex, String describe) async {
+    var options = MutationOptions(document: r"""
+      mutation ($token: String!, $nickName: String!, $name: String!, $sex: Boolean!, $describe: String) {
+        editInfo(token: $token, nickName: $nickName, name: $name, sex: $sex, describe: $describe)
+      }
+    """, variables: {
+      "token": token,
+      "nickName": nickName,
+      "name": name,
+      "sex": sex,
+      "describe": describe
+    });
+    var result = await client.mutate(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    resetCache();
+  }
+
+  static Future<bool> isUserExist(String name) async {
+    var options = QueryOptions(document: r"""
+      query ($name: String!) {
+        UserQuery {
+          checkUserRegister(name: $name)
+        }
+      }
+    """, variables: {"name": name});
+    var result = await client.query(options);
+    if (result.hasErrors) {
+      throw GraphQLException(result.errors[0]);
+    }
+    var res = result.data["UserQuery"]["checkUserRegister"];
+    return res;
+  }
+
+  static Future<void> register(String userName, String password, String name,
+      String nickName, bool sex, String phone, int region) async {
+    var options = MutationOptions(document: r"""
+      mutation ($userName: String!, $password: String!, $name: String!, $nickName: String!, $sex: Boolean!, $phone: String!, $region: Int!) {
+        register(userName: $userName, password: $password, name: $name, nickName: $nickName, sex: $sex, phone: $phone, region: $region)
+      }
+    """, variables: {
+      "userName": userName,
+      "password": password,
+      "name": name,
+      "nickName": nickName,
+      "sex": sex,
+      "phone": phone,
+      "region": region
     });
     var result = await client.mutate(options);
     if (result.hasErrors) {

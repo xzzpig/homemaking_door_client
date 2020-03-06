@@ -15,9 +15,9 @@ class OrderCreatePage extends StatefulWidget {
 }
 
 class _OrderCreatePageState extends State<OrderCreatePage> {
-  Address address = null;
-  PublicUser userInfo = null;
-  String phone = null;
+  Address address;
+  PublicUser userInfo;
+  String phone;
   ServiceInfo serviceInfo;
   DateTime date;
   TimeOfDay time;

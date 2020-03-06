@@ -1,19 +1,23 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/pages/address_list_page.dart';
 import 'package:homemaking_door/pages/loading_page.dart';
 import 'package:homemaking_door/pages/region_select_page.dart';
-import 'package:homemaking_door/pages/service_staff_star_list_page.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
 import 'package:homemaking_door/utils.dart';
 import 'package:homemaking_door/widgets/future_widget.dart';
 import 'package:provider/provider.dart';
 
-class MeInfoPage extends StatelessWidget {
+import 'me_edit_page.dart';
+
+class MeInfoPage extends StatefulWidget {
   static String routeName = "/info";
 
+  @override
+  _MeInfoPageState createState() => _MeInfoPageState();
+}
+
+class _MeInfoPageState extends State<MeInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserInfoState>(
@@ -35,7 +39,7 @@ class MeInfoPage extends StatelessWidget {
                             size: 56,
                           ),
                           title: Text(info.nickName),
-                          subtitle: Text(info.describe),
+                          subtitle: Text(info.describe.toString()),
                           trailing: Container(
                             height: 20,
                             width: 32,
@@ -52,7 +56,11 @@ class MeInfoPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(MeEditPage.routeName)
+                              .then((value) => this.setState(() {}));
+                        },
                       ),
                       InkWell(
                         child: ListTile(
@@ -119,7 +127,7 @@ class MeInfoPage extends StatelessWidget {
         .then((regionId) {
       if (regionId == null) return;
       userInfoState.changeRegion(regionId).then((value) {
-        Navigator.of(context).popAndPushNamed(routeName);
+        Navigator.of(context).popAndPushNamed(MeInfoPage.routeName);
       });
     });
   }

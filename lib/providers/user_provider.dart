@@ -87,6 +87,13 @@ class UserInfoState with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> editInfo(PublicUser info) async {
+    await GraphQLApi.editInfo(
+        token, info.nickName, info.name, info.sex, info.describe);
+    _addresses = null;
+    notifyListeners();
+  }
+
   void update() {
     notifyListeners();
   }

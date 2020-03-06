@@ -3,22 +3,25 @@ import 'package:homemaking_door/beans.dart';
 import 'package:homemaking_door/pages/page.dart';
 import 'package:homemaking_door/pages/service_staff_star_list_page.dart';
 import 'package:homemaking_door/providers/user_provider.dart';
+import 'package:homemaking_door/widgets/future_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'me_info_page.dart';
 
-class MePage extends StatelessWidget with MyPage {
+class MePage extends StatefulWidget with MyPage {
+  @override
+  _MePageState createState() => _MePageState();
+}
+
+class _MePageState extends State<MePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserInfoState>(
       builder: (context, userinfo, child) {
         if (userinfo == null) return Container();
-        return FutureBuilder<PublicUser>(
+        return FutureWidget<PublicUser>(
             future: userinfo.info,
-            builder: (context, state) {
-              if (state.connectionState != ConnectionState.done)
-                return Container();
-              var info = state.data;
+            builder: (context, info) {
               return Column(
                 children: <Widget>[
                   InkWell(
@@ -26,11 +29,13 @@ class MePage extends StatelessWidget with MyPage {
                       leading: FlutterLogo(
                         size: 56,
                       ),
-                      title: Text(info.nickName),
-                      subtitle: Text(info.describe),
+                      title: Text(info.nickName.toString()),
+                      subtitle: Text(info.describe.toString()),
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed(MeInfoPage.routeName);
+                      Navigator.of(context)
+                          .pushNamed(MeInfoPage.routeName)
+                          .then((value) => this.setState(() {}));
                     },
                   ),
                   InkWell(

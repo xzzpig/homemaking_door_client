@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:homemaking_door/pages/chat_list_page.dart';
-import 'package:homemaking_door/pages/me_info_page.dart';
 import 'package:homemaking_door/pages/me_page.dart';
-import 'package:homemaking_door/pages/order_assess_page.dart';
 import 'package:homemaking_door/pages/order_list_page.dart';
 import 'package:homemaking_door/pages/page.dart';
 import 'package:homemaking_door/pages/service_type_page.dart';
@@ -95,6 +91,6 @@ class _MainPageState extends State<MainPage>
   void initState() {
     super.initState();
     // Timer(Duration(seconds: 1),
-    //     () => Navigator.of(context).pushNamed(MeInfoPage.routeName));
+    //     () => Navigator.of(context).pushNamed(MeEditPage.routeName));
   }
 }

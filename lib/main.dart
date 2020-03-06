@@ -5,11 +5,14 @@ import 'package:homemaking_door/pages/address_list_page.dart';
 import 'package:homemaking_door/pages/loading_page.dart';
 import 'package:homemaking_door/pages/login_page.dart';
 import 'package:homemaking_door/pages/main_page.dart';
+import 'package:homemaking_door/pages/me_edit_page.dart';
 import 'package:homemaking_door/pages/me_info_page.dart';
 import 'package:homemaking_door/pages/order_assess_page.dart';
 import 'package:homemaking_door/pages/order_create_page.dart';
 import 'package:homemaking_door/pages/order_detail_page.dart';
 import 'package:homemaking_door/pages/region_select_page.dart';
+import 'package:homemaking_door/pages/register_next_page.dart';
+import 'package:homemaking_door/pages/register_page.dart';
 import 'package:homemaking_door/pages/service_staff_detail_page.dart';
 import 'package:homemaking_door/pages/service_staff_list_page.dart';
 import 'package:homemaking_door/pages/service_staff_star_list_page.dart';
@@ -66,6 +69,8 @@ class MyApp extends StatelessWidget {
           LoadingPage.routeName: (context) => LoadingPage(),
           MainPage.routeName: (context) => MainPage(),
           LoginPage.routeName: (context) => LoginPage(),
+          RegisterPage.routeName: (context) => RegisterPage(),
+          RegisterNextPage.routeName: (context) => RegisterNextPage(),
           ServiceStaffListPage.routeName: (context) => ServiceStaffListPage(),
           ServiceStaffDetailPage.routeName: (context) =>
               ServiceStaffDetailPage(),
@@ -78,6 +83,7 @@ class MyApp extends StatelessWidget {
           RegionSelectPage.routeName: (context) => RegionSelectPage(),
           AddressListPage.routeName: (context) => AddressListPage(),
           AddressEditPage.routeName: (context) => AddressEditPage(),
+          MeEditPage.routeName: (context) => MeEditPage(),
         },
       ),
     );
